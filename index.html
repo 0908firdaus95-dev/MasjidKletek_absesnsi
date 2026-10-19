@@ -58,7 +58,7 @@
 const KEY='masjidku_data_v1';
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const monthNow=()=>today().slice(0,7);
-const seed={jamaah:[{id:'JMH001',name:'Ahmad Fauzi',phone:'',address:'',pin:'1234',joined:today()},{id:'JMH002',name:'Muhammad Rizki',phone:'',address:'',pin:'1234',joined:today()},{id:'JMH003',name:'Abdul Rahman',phone:'',address:'',pin:'1234',joined:today()}],attendance:[],settings:{adminPassword:'masjid123'}};
+const seed={jamaah:[{id:'JMH001',name:'Ahmad Fauzi',phone:'',address:'',pin:'1234',joined:today()},{id:'JMH002',name:'Muhammad Rizki',phone:'',address:'',pin:'1234',joined:today()},{id:'JM12',name:'linta sabrina aulia',phone:'',address:'',pin:'0304',joined:today()},{id:'JMH003',name:'Abdul Rahman',phone:'',address:'',pin:'1234',joined:today()}],attendance:[],settings:{adminPassword:'masjid123'}};
 let db=loadDB(), role='jamaah', user=null, page='dashboard';
 function loadDB(){try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(seed)}catch(e){return JSON.parse(JSON.stringify(seed))}}
 function save(){localStorage.setItem(KEY,JSON.stringify(db))}
