@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function isAdmin() { return signedIn() && userDoc().role == 'admin'; }
+    function isJamaah() { return signedIn() && userDoc().role == 'jamaah'; }
+
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      // Only an administrator may assign/edit roles and jamaah identity links.
+      allow create, update, delete: if isAdmin();
+    }
+    match /jamaah/{jamaahId} {
+      allow read: if isAdmin() || (isJamaah() && userDoc().jamaahId == jamaahId);
+      allow create, update, delete: if isAdmin();
+    }
+    match /attendance/{recordId} {
+      allow read: if isAdmin() || (isJamaah() && resource.data.jamaahId == userDoc().jamaahId);
+      allow create: if isJamaah()
+        && request.resource.data.jamaahId == userDoc().jamaahId
+        && request.resource.data.date is string
+        && request.resource.data.time is string;
+      allow update, delete: if isAdmin();
+    }
+  }
+}
